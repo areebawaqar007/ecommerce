@@ -14,7 +14,7 @@ export const createProduct = async (req, res, next) => {
 
 // Get All Products
 export const getAllProducts = async (req, res, next) => {
-  const apiFeature = new ApiFeatures(Product.find(), req.query).search();
+  const apiFeature = new ApiFeatures(Product.find(), req.query).search().filter();
 
   const products = await apiFeature.query;
 
