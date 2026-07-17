@@ -1,29 +1,25 @@
 import express from "express";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 
-// routes
+// Routes
 import productRoutes from "./routes/productRoute.js";
-import userRoutes from "./routes/userRoute.js"
+import userRoutes from "./routes/userRoute.js";
 
+// Middleware
 import errorMiddleware from "../middleware/error.js";
-
-
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 
-
+// Routes
 app.use("/api/v1", productRoutes);
 app.use("/api/v1", userRoutes);
 
-
-
-// app.get("/", (req, res) => {
-//   res.send("Server is working");
-// });
-
 // Error middleware (always keep this LAST)
 app.use(errorMiddleware);
+
 export default app;

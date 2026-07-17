@@ -1,10 +1,10 @@
 import express from "express";
 import { getAllProducts,createProduct, updateProduct, deleteProduct, getProductDetails } from "../controllers/productController.js";
-
+import { isAuthenticatedUser } from "../../middleware/auth.js";
 const router = express.Router();
 
 
-router.get("/product", getAllProducts);
+router.get("/product",isAuthenticatedUser, getAllProducts);
 router.post("/product/new", createProduct);
 router.put("/product/:id", updateProduct);
 router.delete("/product/:id", deleteProduct);
