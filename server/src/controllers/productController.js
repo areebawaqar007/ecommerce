@@ -14,6 +14,7 @@ export const createProduct = async (req, res, next) => {
 
 // Get All Products
 export const getAllProducts = async (req, res, next) => {
+  const productsCount = await Product.countDocuments();
   const resultPerPage = 5;
   const apiFeature = new ApiFeatures(Product.find(), req.query)
     .search()
