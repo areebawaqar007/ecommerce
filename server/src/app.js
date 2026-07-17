@@ -2,6 +2,9 @@ import express from "express";
 import cors from "cors";
 import productRoutes from "./routes/productRoute.js";
 
+import errorMiddleware from "../middleware/error.js";
+
+
 
 const app = express();
 
@@ -15,5 +18,6 @@ app.use("/api/v1", productRoutes);
 //   res.send("Server is working");
 // });
 
-
+// Error middleware (always keep this LAST)
+app.use(errorMiddleware);
 export default app;
