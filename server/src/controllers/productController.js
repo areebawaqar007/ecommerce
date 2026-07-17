@@ -14,7 +14,10 @@ export const createProduct = async (req, res, next) => {
 
 // Get All Products
 export const getAllProducts = async (req, res, next) => {
-  const apiFeature = new ApiFeatures(Product.find(), req.query).search().filter();
+  const resultPerPage = 5;
+  const apiFeature = new ApiFeatures(Product.find(), req.query)
+    .search()
+    .filter().pagination(resultPerPage);
 
   const products = await apiFeature.query;
 
@@ -26,14 +29,10 @@ export const getAllProducts = async (req, res, next) => {
 
 // Update Product - Admin
 export const updateProduct = async (req, res, next) => {
-  const product = await Product.findByIdAndUpdate(
-    req.params.id,
-    req.body,
-    {
-      new: true,
-      runValidators: true,
-    }
-  );
+  const product = await Product.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true,
+  });
 
   if (!product) {
     return next(new ErrorHandler("Product not found", 404));
@@ -44,8 +43,6 @@ export const updateProduct = async (req, res, next) => {
     product,
   });
 };
-
-
 
 // Delete Product - Admin
 export const deleteProduct = async (req, res, next) => {
