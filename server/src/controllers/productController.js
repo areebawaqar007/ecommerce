@@ -4,6 +4,7 @@ import { Product } from "../models/productModel.js";
 import catchAsyncErrors from "../../middleware/catchAsyncErrors.js";
 // Create Product - Admin
 export const createProduct = async (req, res, next) => {
+  req.body.user = req.user.id;
   const product = await Product.create(req.body);
 
   res.status(201).json({

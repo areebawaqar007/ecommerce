@@ -3,6 +3,8 @@ import { ApiFeatures } from "../../Utils/apifeatures.js";
 import { User } from "../models/userModel.js";
 import catchAsyncErrors from "../../middleware/catchAsyncErrors.js";
 import { sendToken } from "../../Utils/jwtToken.js";
+import { sendEmail } from "../../Utils/sendEmail.js";
+
 
 
 // Register a User
@@ -46,4 +48,63 @@ export const loginUser = catchAsyncErrors(async (req, res, next) => {
   }
 
  sendToken(user, 201, res);
+});
+
+
+// Logout User
+export const logout = catchAsyncErrors(async (req, res, next) => {
+  res.cookie("token", null, {
+    expires: new Date(Date.now()),
+    httpOnly: true,
+  });
+
+  res.status(200).json({
+    success: true,
+    message: "Logged Out",
+  });
+});
+
+
+// Forgot Password
+export const forgotPassword = catchAsyncErrors(async (req, res, next) => {
+  const user = await User.findOne({ email: req.body.email });
+
+  if (!user) {
+    return next(new ErrorHandler("User not found", 404));
+  }
+
+  // Generate Reset Password Token
+  const resetToken = user.getResetPasswordToken();
+
+  await user.save({ validateBeforeSave: false });
+
+  const resetPasswordUrl = `${req.protocol}://${req.get(
+    "host"
+  )}/password/reset/${resetToken}`;
+
+  const message = `Your password reset token is:
+
+${resetPasswordUrl}
+
+If you have not requested this email, please ignore it.`;
+
+  try {
+    await sendEmail({
+      email: user.email,
+      subject: "Ecommerce Password Recovery",
+      message,
+    });
+
+    res.status(200).json({
+      success: true,
+      message: `Email sent to ${user.email} successfully`,
+    });
+  } catch (error) {
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpire = undefined;
+
+    await user.save({ validateBeforeSave: false });
+
+    return next(new ErrorHandler(error.message, 500));
+  }
 });

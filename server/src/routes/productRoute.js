@@ -1,16 +1,18 @@
 import express from "express";
-import { getAllProducts,createProduct, updateProduct, deleteProduct, getProductDetails } from "../controllers/productController.js";
-import { isAuthenticatedUser } from "../../middleware/auth.js";
+import {
+  getAllProducts,
+  createProduct,
+  updateProduct,
+  deleteProduct,
+  getProductDetails,
+} from "../controllers/productController.js";
+import { authorizeRoles, isAuthenticatedUser } from "../../middleware/auth.js";
 const router = express.Router();
 
-
-router.get("/product",isAuthenticatedUser, getAllProducts);
-router.post("/product/new", createProduct);
-router.put("/product/:id", updateProduct);
-router.delete("/product/:id", deleteProduct);
+router.get("/product",getAllProducts,);
+router.post("/product/new", isAuthenticatedUser, authorizeRoles("admin"),createProduct);
+router.put("/product/:id", isAuthenticatedUser,authorizeRoles("admin"), updateProduct);
+router.delete("/product/:id", isAuthenticatedUser,authorizeRoles("admin"), deleteProduct);
 router.get("/product/:id", getProductDetails);
-
-
-
 
 export default router;
