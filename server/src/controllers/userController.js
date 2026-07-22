@@ -1,11 +1,10 @@
-import ErrorHandler from "../../Utils/errorhandler.js";
-import { ApiFeatures } from "../../Utils/apifeatures.js";
+import ErrorHandler from "../Utils/errorhandler.js";
+import { ApiFeatures } from "../Utils/apifeatures.js";
 import { User } from "../models/userModel.js";
-import catchAsyncErrors from "../../middleware/catchAsyncErrors.js";
-import { sendToken } from "../../Utils/jwtToken.js";
-import { sendEmail } from "../../Utils/sendEmail.js";
+import catchAsyncErrors from "../middleware/catchAsyncErrors.js";
+import { sendToken } from "../Utils/jwtToken.js";
+import { sendEmail } from "../Utils/sendEmail.js";
 import crypto from "crypto";
-
 
 // Register a User
 export const registerUser = catchAsyncErrors(async (req, res, next) => {
@@ -21,9 +20,8 @@ export const registerUser = catchAsyncErrors(async (req, res, next) => {
     },
   });
 
-   sendToken(user, 201, res);
+  sendToken(user, 201, res);
 });
-
 
 // Login User
 export const loginUser = catchAsyncErrors(async (req, res, next) => {
@@ -32,24 +30,23 @@ export const loginUser = catchAsyncErrors(async (req, res, next) => {
   // checking if user has given password and email both
 
   if (!email || !password) {
-    return next(new ErrorHander("Please Enter Email & Password", 400));
+    return next(new ErrorHandler("Please Enter Email & Password", 400));
   }
 
   const user = await User.findOne({ email }).select("+password");
 
   if (!user) {
-    return next(new ErrorHander("Invalid email or password", 401));
+    return next(new ErrorHandler("Invalid email or password", 401));
   }
 
   const isPasswordMatched = await user.comparePassword(password);
 
   if (!isPasswordMatched) {
-    return next(new ErrorHander("Invalid email or password", 401));
+    return next(new ErrorHandler("Invalid email or password", 401));
   }
 
- sendToken(user, 201, res);
+  sendToken(user, 201, res);
 });
-
 
 // Logout User
 export const logout = catchAsyncErrors(async (req, res, next) => {
@@ -63,7 +60,6 @@ export const logout = catchAsyncErrors(async (req, res, next) => {
     message: "Logged Out",
   });
 });
-
 
 // Forgot Password
 export const forgotPassword = catchAsyncErrors(async (req, res, next) => {
@@ -79,7 +75,7 @@ export const forgotPassword = catchAsyncErrors(async (req, res, next) => {
   await user.save({ validateBeforeSave: false });
 
   const resetPasswordUrl = `${req.protocol}://${req.get(
-    "host"
+    "host",
   )}/password/reset/${resetToken}`;
 
   const message = `Your password reset token is:
@@ -109,7 +105,6 @@ If you have not requested this email, please ignore it.`;
   }
 });
 
-
 // Reset Password
 export const resetPassword = catchAsyncErrors(async (req, res, next) => {
   // creating token hash
@@ -125,10 +120,10 @@ export const resetPassword = catchAsyncErrors(async (req, res, next) => {
 
   if (!user) {
     return next(
-      new ErrorHander(
+      new ErrorHandler(
         "Reset Password Token is invalid or has been expired",
-        400
-      )
+        400,
+      ),
     );
   }
 

@@ -1,7 +1,7 @@
-import ErrorHandler from "../../Utils/errorhandler.js";
-import { ApiFeatures } from "../../Utils/apifeatures.js";
+import ErrorHandler from "../Utils/errorhandler.js";
+import { ApiFeatures } from "../Utils/apifeatures.js";
 import { Product } from "../models/productModel.js";
-import catchAsyncErrors from "../../middleware/catchAsyncErrors.js";
+import catchAsyncErrors from "../middleware/catchAsyncErrors.js";
 // Create Product - Admin
 export const createProduct = async (req, res, next) => {
   req.body.user = req.user.id;
@@ -19,7 +19,8 @@ export const getAllProducts = async (req, res, next) => {
   const resultPerPage = 5;
   const apiFeature = new ApiFeatures(Product.find(), req.query)
     .search()
-    .filter().pagination(resultPerPage);
+    .filter()
+    .pagination(resultPerPage);
 
   const products = await apiFeature.query;
 
