@@ -13,8 +13,6 @@ router.post("/register", registerUser);
 router.post("/login", loginUser);
 router.post("/password/forgot/", forgotPassword);
 router.put("/password/reset/:token", resetPassword);
-
-
 router.post("/logout", logout);
 
 export default router;
