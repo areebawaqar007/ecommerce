@@ -8,6 +8,8 @@ import {
   getUserDetails,
   updatePassword,
   updateProfile,
+  getAllUsers,
+  getSingleUser,
 } from "../controllers/userController.js";
 
 
@@ -22,6 +24,8 @@ router.post("/logout", logout);
 router.get("/me", isAuthenticatedUser, getUserDetails);
 router.put("/password/update", isAuthenticatedUser, updatePassword)
 router.put("/me/update", isAuthenticatedUser, updateProfile);
+router.get("/admin/users", isAuthenticatedUser, authorizeRoles("admin"), getAllUsers)
+router.get("/admin/user/:id",isAuthenticatedUser,authorizeRoles("admin"),getSingleUser)
 
 
 
