@@ -7,8 +7,7 @@ import productRoutes from "./routes/productRoute.js";
 import userRoutes from "./routes/userRoute.js";
 
 // Middleware
-import errorMiddleware from "../middleware/error.js";
-
+import errorMiddleware from "./middleware/error.js";
 const app = express();
 
 app.use(cors());

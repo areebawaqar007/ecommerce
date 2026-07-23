@@ -17,13 +17,13 @@ router.post(
   createProduct,
 );
 router.put(
-  "/product/:id",
+  "/admin/product/:id",
   isAuthenticatedUser,
   authorizeRoles("admin"),
   updateProduct,
 );
 router.delete(
-  "/product/:id",
+  "/admin/product/:id",
   isAuthenticatedUser,
   authorizeRoles("admin"),
   deleteProduct,
