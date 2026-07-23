@@ -5,13 +5,14 @@ import {
   updateProduct,
   deleteProduct,
   getProductDetails,
+  createProductReview,
 } from "../controllers/productController.js";
 import { authorizeRoles, isAuthenticatedUser } from "../middleware/auth.js";
 const router = express.Router();
 
 router.get("/product", getAllProducts);
 router.post(
-  "/product/new",
+  "/admin/product/new",
   isAuthenticatedUser,
   authorizeRoles("admin"),
   createProduct,
@@ -29,5 +30,7 @@ router.delete(
   deleteProduct,
 );
 router.get("/product/:id", getProductDetails);
+
+router.put("/review",isAuthenticatedUser,createProductReview)
 
 export default router;
